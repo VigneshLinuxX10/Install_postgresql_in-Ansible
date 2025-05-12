@@ -1,0 +1,21 @@
+---
+- name: Install Postgresql-server
+  hosts: web_server
+  become: yes
+  tasks:
+    - name: Install postgresql-server
+      yum:
+        name: postgresql-server
+        state: present
+
+    - name: Initialize the postgresql database if it not initialized
+      command: /usr/bin/postgresql-setup initdb
+      args:
+        creates: /var/lib/pgsql/data/PG_VERSION
+
+    - name: Start and enable postgresql-service
+      service:
+        name: postgresql
+        state: started
+        enabled: yes
+
